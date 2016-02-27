@@ -1,0 +1,27 @@
+#!/bin/bash
+REPO="deploy-test"
+BANK_REPOS="/media/source/code"
+PRODUCTION_BRANCH="master"
+PRODUCTION="ssh_user@host_ip:/path/to/www"
+DEVELOPMENT_BRANCH="development"
+LOCAL_SOURCE="/media/source/deployments/$REPO"
+
+if ! [ -t 0 ]; then
+        read -a ref
+fi
+IFS='/' read -ra REF <<< "${ref[2]}"
+branch_received="${REF[2]}"
+
+case "$branch_received" in 
+	"$PRODUCTION_BRANCH")
+		echo "==========DEPLOY PRODUCTION=============="
+        git --work-tree=$LOCAL_SOURCE --git-dir=$BANK_REPOS/$REPO.git checkout -f
+        rsync -rv --update --delete-after --exclude ".gitignore" $LOCAL_SOURCE $PRODUCTION
+        echo "==========END DEPLOY PRODUCTION=========="
+	;;
+	"$DEVELOPMENT_BRANCH")
+		echo "==========DEPLOY DEVELOPMENT=============="
+        git --work-tree=$LOCAL_SOURCE --git-dir=$BANK_REPOS/$REPO.git checkout -f development
+        echo "==========END DEPLOY DEVELOPMENT=========="
+	;;
+esac
