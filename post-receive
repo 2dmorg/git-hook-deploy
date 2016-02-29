@@ -2,9 +2,9 @@
 REPO="deploy-test"
 BANK_REPOS="/media/source/code"
 PRODUCTION_BRANCH="master"
-PRODUCTION="ssh_user@host_ip:/path/to/www"
+PRODUCTION="path_ssh"
 DEVELOPMENT_BRANCH="development"
-LOCAL_SOURCE="/media/source/deployments/$REPO"
+LOCAL_SOURCE="path_tmp_source"
 
 if ! [ -t 0 ]; then
         read -a ref
